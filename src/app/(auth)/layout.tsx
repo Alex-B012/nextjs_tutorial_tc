@@ -4,8 +4,6 @@ interface AuthLayoutProps {
   children: ReactNode;
 }
 
-// 1:30:24
-
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-950 bg-[radial-gradient(circle_at_center, var(--tw-gradient-stops))] from-zinc-900 via-zinc-950 to-black">

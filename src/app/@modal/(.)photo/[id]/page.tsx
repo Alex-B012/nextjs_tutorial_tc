@@ -5,8 +5,6 @@ interface PhotoModalProps {
   params: Promise<{ id: string }>;
 }
 
-// 1:52:38
-
 export default async function PhotoModal({ params }: PhotoModalProps) {
   const { id } = await params;
   const car = CARS.find((c) => c.id === id);
