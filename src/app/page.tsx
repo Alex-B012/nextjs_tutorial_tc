@@ -1,28 +1,21 @@
-import Link from "next/link";
+async function getGithubProfile() {
+  const res = await fetch("https://api.github.com/repos/vercel/ai", {
+    next: { revalidate: 60 },
+  });
 
-export const CARS = [
-  { id: "1", name: "Porsche 911" },
-  { id: "2", name: "Aston Martin DB12" },
-  { id: "3", name: "Audi RS6" },
-];
+  if (!res.ok) throw new Error("Failed to fetch github profile");
+  return res.json();
+}
 
-export default function Home() {
+export default async function Home() {
+  const data = await getGithubProfile();
+
   return (
-    <main className="p-10 bg-black min-h-screen">
-      <h1 className="text-3xl font-black text-white mb-10 uppercase italic">
-        The Garage
-      </h1>
-      <div className="flex gap-4">
-        {CARS.map((car) => (
-          <Link
-            href={`/photo/${car.id}`}
-            key={car.id}
-            className="p-6 bg-zinc-900 border border-zinc-800 rounded-xl text-white hover:border-blue-500 transition-all"
-          >
-            {car.name}
-          </Link>
-        ))}
-      </div>
+    <main className="p-10 bg-black text-white min-h-screen">
+      <h2>Name: {data.name}</h2>
+      <p>Owner: {data.owner.login}</p>
+      <p>Stars: {data.stargazers_count}</p>
+      <p>Forks: {data.forks_count}</p>
     </main>
   );
 }
