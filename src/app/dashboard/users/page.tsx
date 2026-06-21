@@ -1,3 +1,4 @@
+import { WinkBtn } from "@/components/wing-btn";
 import { db } from "@/lib/db";
 
 export default async function UsersPage() {
@@ -10,6 +11,7 @@ export default async function UsersPage() {
         {users.map((user) => (
           <li key={user.id} className="border-b pb-2">
             <span className="font-medium ">{user.email}</span>
+            <WinkBtn name={user.name} />
           </li>
         ))}
       </ul>

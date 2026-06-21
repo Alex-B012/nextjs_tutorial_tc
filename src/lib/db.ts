@@ -7,9 +7,7 @@ const MOCK_USERS = [
   { id: 4, name: "Dmitry", email: "dima@gmail.com" },
 ];
 
-const db_delay = 250;
-
-// 2:41:42
+const db_delay = 150;
 
 export const db = {
   query: {
