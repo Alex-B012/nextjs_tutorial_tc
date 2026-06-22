@@ -1,4 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
+import Link from "next/link";
 
 async function fetchProducts() {
   "use cache";
@@ -19,13 +20,14 @@ export default async function ProductsPage() {
       <h2 className="text-xl font-bold text-white">Popular items</h2>
       <ul className="space-y-2">
         {products.map((product: any) => (
-          <li
+          <Link
             key={product.id}
+            href={`/products/${product.id}`}
             className="p-3 bg-gray-850 rounded border border-gray-800 flex justify-between"
           >
             <span className="text-gray-300">{product.title}</span>
             <span className="text-emerald-400 font-mono">${product.price}</span>
-          </li>
+          </Link>
         ))}
       </ul>
     </div>

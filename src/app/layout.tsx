@@ -20,10 +20,10 @@ export const metadata: Metadata = {
 
 interface RootLayoutProps {
   children: ReactNode;
-  modal: ReactNode;
+  // modal: ReactNode;
 }
 
-export default function RootLayout({ children, modal }: RootLayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang="en"
@@ -31,7 +31,7 @@ export default function RootLayout({ children, modal }: RootLayoutProps) {
     >
       <body className="min-h-full flex flex-col">
         {children}
-        {modal}
+        {/* {modal} */}
       </body>
     </html>
   );

@@ -5,6 +5,17 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+// export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const res = await fetch(`https://dummyjson.com/products`);
+  const data = await res.json();
+
+  return data.products.map((product: any) => ({
+    id: product.id.toString(),
+  }));
+}
+
 async function fetchProduct(id: string) {
   "use cache";
 
