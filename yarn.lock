@@ -829,6 +829,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"next-safe-action@npm:^8.5.5":
+  version: 8.5.5
+  resolution: "next-safe-action@npm:8.5.5"
+  peerDependencies:
+    next: ">= 14.0.0"
+    react: ">= 18.2.0"
+    react-dom: ">= 18.2.0"
+  checksum: 10c0/32efe20902f50bae2bd8dfdc0f3cc3c0755296e8635067ce4fbbed38da2890ce8e998823bf4f9df171f5936e15398221d49c64bd6685c1b3c78bdb7d3467fc3f
+  languageName: node
+  linkType: hard
+
 "next@npm:16.2.9":
   version: 16.2.9
   resolution: "next@npm:16.2.9"
@@ -899,10 +910,12 @@ __metadata:
     "@types/react-dom": "npm:^19"
     babel-plugin-react-compiler: "npm:1.0.0"
     next: "npm:16.2.9"
+    next-safe-action: "npm:^8.5.5"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
     tailwindcss: "npm:^4"
     typescript: "npm:^5"
+    zod: "npm:^4.4.3"
   languageName: unknown
   linkType: soft
 
@@ -1121,5 +1134,12 @@ __metadata:
   version: 6.21.0
   resolution: "undici-types@npm:6.21.0"
   checksum: 10c0/c01ed51829b10aa72fc3ce64b747f8e74ae9b60eafa19a7b46ef624403508a54c526ffab06a14a26b3120d055e1104d7abe7c9017e83ced038ea5cf52f8d5e04
+  languageName: node
+  linkType: hard
+
+"zod@npm:^4.4.3":
+  version: 4.4.3
+  resolution: "zod@npm:4.4.3"
+  checksum: 10c0/7ea31b558e88f9faf44f31dd185e2e1cbf51fed3081787fb96cc2534749b50c0acfc6da7f0922a7353ed092dd358c7d50c28ea96c94d04af64191bd33152eca3
   languageName: node
   linkType: hard
