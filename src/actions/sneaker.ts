@@ -36,7 +36,7 @@ export const createSneakerDrop = actionClient
 
       if (!res.ok) throw new Error(data.message || "Failed to create product");
 
-      return { success: true, product: data };
+      return { success: true, productId: data.id };
     } catch (error: any) {
       throw new Error(error.message || "Item was not created");
     }
