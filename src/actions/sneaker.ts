@@ -1,7 +1,7 @@
 "use server";
 
 import { actionClient } from "@/app/lib/safe-action";
-import z from "zod";
+import z, { success } from "zod";
 
 const CreateSneakerSchema = z.object({
   title: z
@@ -40,4 +40,20 @@ export const createSneakerDrop = actionClient
     } catch (error: any) {
       throw new Error(error.message || "Item was not created");
     }
+  });
+
+const ToggleFavoriteSchema = z.object({
+  id: z.number(),
+});
+
+export const toggleFavorite = actionClient
+  .inputSchema(ToggleFavoriteSchema)
+  .action(async ({ parsedInput }) => {
+    console.log("ParsedInput: ", parsedInput);
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    if (parsedInput.id === 2)
+      throw new Error("Could not update the favorite status of this model");
+
+    return { success: true, id: parsedInput.id };
   });

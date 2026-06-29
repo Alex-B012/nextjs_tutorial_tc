@@ -1,6 +1,7 @@
 "use client";
 
 import { createSneakerDrop } from "@/actions/sneaker";
+import { SubmitButton } from "@/components/submit-btn";
 import { useActionState } from "react";
 
 type FormState = {
@@ -131,13 +132,8 @@ export default function NewDropPage() {
             </span>
           )}
         </div>
-        <button
-          type="submit"
-          disabled={isPending}
-          className="w-30 bg-blue-600 text-white py-2 px-4 mt-20 rounded cursor-pointer hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isPending ? "Sending..." : "Submit"}
-        </button>
+
+        <SubmitButton />
       </form>
       {state.error && (
         <div className="min-w-150 text-red-500 mt-15 p-3 border border-red-500 rounded">
