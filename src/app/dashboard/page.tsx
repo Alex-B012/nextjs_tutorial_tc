@@ -1,10 +1,18 @@
 import { Suspense } from "react";
 import DashboardContent from "./DashboardContent";
 
-export default function DashboardPage() {
+interface DashboardPageProps {
+  searchParams: Promise<{
+    [key: string]: string | string[] | undefined;
+  }>;
+}
+
+export default function DashboardPage({ searchParams }: DashboardPageProps) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <DashboardContent />
+      <DashboardContent searchParams={searchParams} />
     </Suspense>
   );
 }
+
+// 6:37:04

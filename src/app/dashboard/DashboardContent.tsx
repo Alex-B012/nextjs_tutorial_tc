@@ -1,8 +1,24 @@
 import { headers } from "next/headers";
 
-export default async function DashboardPage() {
-  const headersStore = await headers();
-  const host = headersStore.get("host");
+interface DashboardContentProps {
+  searchParams: Promise<{
+    [key: string]: string | string[] | undefined;
+  }>;
+}
 
-  return <div className="p-10">Your host: {host}</div>;
+export default async function DashboardPage({
+  searchParams,
+}: DashboardContentProps) {
+  const params = await searchParams;
+
+  const currentPage = Number(params.page) || 1;
+  const currentSort = params.sort === "desc" ? "desc" : "asc";
+
+  return (
+    <div className="p-10">
+      Current Page: {currentPage}
+      <br />
+      Current Sort: {currentSort}
+    </div>
+  );
 }
