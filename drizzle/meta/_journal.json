@@ -8,6 +8,13 @@
       "when": 1782759560514,
       "tag": "0000_pale_kronos",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782834593862,
+      "tag": "0001_many_professor_monster",
+      "breakpoints": true
     }
   ]
 }

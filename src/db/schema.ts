@@ -5,6 +5,7 @@ import {
   integer,
   timestamp,
   uuid,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 
 export const products = pgTable("products", {
@@ -16,12 +17,13 @@ export const products = pgTable("products", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const productsRelations = relations(products, ({ one }) => ({
+export const productsRelations = relations(products, ({ one, many }) => ({
   brand: one(brands, {
     fields: [products.brandId],
     references: [brands.id],
   }),
   details: one(productDetails),
+  categories: many(productsToCategories),
 }));
 
 export const productDetails = pgTable("product_details", {
@@ -49,4 +51,40 @@ export const brands = pgTable("brands", {
 
 export const brandsRelations = relations(brands, ({ many }) => ({
   products: many(products),
+}));
+
+export const categories = pgTable("categories", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+});
+
+export const productsToCategories = pgTable(
+  "products_to_categories",
+  {
+    productId: uuid("product_id")
+      .notNull()
+      .references(() => products.id),
+    categoryId: uuid("category_id")
+      .notNull()
+      .references(() => categories.id),
+  },
+  (t) => ({ pk: primaryKey({ columns: [t.productId, t.categoryId] }) }),
+);
+
+export const productsToCategoriesRelations = relations(
+  productsToCategories,
+  ({ one }) => ({
+    product: one(products, {
+      fields: [productsToCategories.productId],
+      references: [products.id],
+    }),
+    category: one(categories, {
+      fields: [productsToCategories.categoryId],
+      references: [categories.id],
+    }),
+  }),
+);
+
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  products: many(productsToCategories),
 }));
