@@ -1,18 +1,38 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import type { ReactNode } from "react";
-
+import "./globals.css";
+import localFont from "next/font/local";
 import { PathnameProvider } from "@/components/pathname-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
+  display: "swap",
+  weight: ["400", "500", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const montserratAccent = Montserrat({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-montserrat",
+  display: "swap",
+  weight: ["700"],
+});
+
+const customSlabFont = localFont({
+  src: [
+    {
+      path: "../assets/fonts/roboto_slab/RobotoSlab-Black.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../assets/fonts/roboto_slab/RobotoSlab-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-customSlabFont",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +48,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${customSlabFont.variable} ${geistSans.variable} ${montserratAccent.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <PathnameProvider />

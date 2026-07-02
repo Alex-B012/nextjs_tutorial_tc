@@ -18,9 +18,7 @@ export default async function Home() {
       <p>Owner: {data.owner.login}</p>
       <p>Stars: {data.stargazers_count}</p>
       <p>Forks: {data.forks_count}</p>
-      <div className="mt-10">
-        <HeroBanner />
-      </div>
+      <div className="mt-10">{/* <HeroBanner /> */}</div>
     </main>
   );
 }

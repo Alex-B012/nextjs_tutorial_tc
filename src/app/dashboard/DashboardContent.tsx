@@ -15,7 +15,7 @@ export default async function DashboardPage({
   const currentSort = params.sort === "desc" ? "desc" : "asc";
 
   return (
-    <div className="p-10">
+    <div className="font-customSlabFont p-10">
       Current Page: {currentPage}
       <br />
       Current Sort: {currentSort}
