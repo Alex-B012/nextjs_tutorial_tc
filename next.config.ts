@@ -2,6 +2,28 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  output: "standalone",
+  poweredByHeader: false,
+  reactStrictMode: true,
+  productionBrowserSourceMaps: false,
+  compress: false,
+  generateEtags: false,
+  cleanDistDir: true,
+  typescript: {
+    ignoreBuildErrors: true,
+    tsconfigPath: "tsconfig.json",
+  },
+
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+
+  experimental: {
+    optimizePackageImports: ["lucide-react", "date-fns", "lodash-es"],
+  },
+
   images: {
     unoptimized: false,
     formats: ["image/avif", "image/webp"],
