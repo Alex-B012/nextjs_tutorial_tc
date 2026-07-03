@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 interface PageProps {
   params: Promise<{
@@ -35,7 +36,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function CatalogPage({ params }: PageProps) {
+export default function CatalogPage(props: PageProps) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CatalogInnerPage {...props} />
+    </Suspense>
+  );
+}
+
+export async function CatalogInnerPage({ params }: PageProps) {
   const { category, slug } = await params;
   const res = await fetch(`https://dummyjson.com/products/${slug}`, {
     cache: "force-cache",
