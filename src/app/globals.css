@@ -1,30 +1,94 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 210 19% 14%;
+  --foreground: 210 20% 98%;
+  --surface: 210 20% 33%;
+
+  --primary: 262.1 83.3% 57.8%;
+  --primary-foreground: 0 0% 100%;
+
+  --accent: 210, 17%, 60%;
+  --accent-foreground: 210 20% 98%;
+
+  --card: 210 17% 9%;
+  --card-foreground: 210 20% 98%;
+
+  --popover: 210 17% 60%;
+  --popover-foreground: 216 19% 21%;
+
+  --muted: 210 15% 65%;
+  --muted-foreground: 210 33% 80%;
+
+  --destructive: 28, 100% 47%;
+
+  --input: 210 50% 87%;
+  --input-foreground: 210 17% 14%;
+
+  --border: 215 19% 21%;
+  --ring: 199 89% 61%;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-surface: hsl(var(--surface));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-input: hsl(var(--input));
+  --color-input-foreground: hsl(var(--input-foreground));
+  --color-border: hsl(var(--border));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
   --font-sans: var(--font-geist-sans);
-  /* --font-mono: var(--font-geist-mono); */
-  --font-montserrat: var(--font-montserrat);
-  --font-customSlabFont: var(--font-customSlabFont);
 }
 
-@media (prefers-color-scheme: dark) {
+body {
+  @apply bg-background text-foreground;
+
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scroller {
+  width: 10px;
+}
+
+::webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface);
+  border-radius: 5px;
+  border: 2px solid var(--background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
+}
+
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
-body {
+/* body {
   background: var(--background);
   color: var(--foreground);
   font-family:
     var(--font-customSlabFont), var(--font-sans), var(--font-montserrat), Arial,
     Helvetica, sans-serif;
-}
+} */
