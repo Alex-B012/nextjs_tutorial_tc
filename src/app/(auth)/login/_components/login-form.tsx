@@ -15,6 +15,7 @@ export const loginSchema = z.object({
 });
 
 const callbackURL = "/";
+const registerURL = "/register";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -68,31 +69,73 @@ export const LoginForm = () => {
       </div>
 
       <form.Field
-      name="identifier"
-      validators={{onChange: loginSchema.shape.identifier}}
-      children={(field) => {const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid 
+        name="identifier"
+        validators={{ onChange: loginSchema.shape.identifier }}
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
 
-        return(
-                <Field data-invalid={isInvalid}>
-                        <FieldLabel htmlFor={field.name}>
-                                Email or username
-                        </FieldLabel>
-                        <Input 
-                        id={field.name}
-                        name={field.name}
-                        placeholder='tyler_jones'
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        aria-invalid={isInvalid}/>
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>Email or username</FieldLabel>
 
-                        {isInvalid && (<FieldError errors={field.state.meta.errors}/>)}
-                </Field>
-        )
-      }}
+              <Input
+                id={field.name}
+                name={field.name}
+                placeholder="tyler_jones"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                aria-invalid={isInvalid}
+              />
+
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
       />
-    <form.Field 
-    name='password'
-    />
+      <form.Field
+        name="password"
+        validators={{ onChange: loginSchema.shape.password }}
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+              <Input
+                id={field.name}
+                name={field.name}
+                type="password"
+                placeholder="******"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                aria-invalid={isInvalid}
+              />
+
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Subscribe
+        selector={(state) => [state.canSubmit, state.isSubmitting]}
+        children={([canSubmit, isSubmitting]) => (
+          <Button type="submit" disabled={isSubmitting} className="mt-2">
+            {isSubmitting ? "Loading..." : "Sign In"}
+          </Button>
+        )}
+      />
+
+      <p className="mt-1 text-center text-sm text-muted-foreground">
+        Do not have an account?{" "}
+        <Link href={registerURL} className="text-foreground hover:underline">
+          Create account
+        </Link>
+      </p>
+    </form>
   );
 };
