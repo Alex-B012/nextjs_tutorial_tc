@@ -5,6 +5,7 @@ import { Avatar as AvatarPrimitive } from "radix-ui";
 
 function Avatar({
   className,
+
   size = "default",
   ...props
 }: React.ComponentProps<typeof AvatarPrimitive.Root> & {
@@ -67,4 +68,4 @@ function AvatarBadge({ className, ...props }: React.ComponentProps<"span">) {
   );
 }
 
-// 9:08:01
+export { Avatar, AvatarImage, AvatarFallback, AvatarBadge };

@@ -1,4 +1,11 @@
-import { boolean, date, index, pgTable, text } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  date,
+  index,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { users } from "./users";
 import { films } from "./films";
 import { reviews } from "./reviews";
@@ -19,6 +26,7 @@ export const diary = pgTable(
     reviewId: text("review_id").references(() => reviews.id, {
       onDelete: "set null",
     }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => ({
     filmIdx: index("diary_film_id_idx").on(table.filmId),

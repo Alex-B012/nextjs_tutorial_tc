@@ -6,8 +6,9 @@ import * as schema from "@/server/db/schema";
 import { and, asc, avg, count, desc, eq, gte, ilike, sql } from "drizzle-orm";
 import { discoverySchema, getFilmBySlugSchema } from "../schemas/film";
 import { DiscoverFilmsResponse, FilmDetails } from "../types/film";
+import { id } from "zod/locales";
 
-export const discoverFilmAction = actionClient
+export const discoverFilmsAction = actionClient
   .inputSchema(discoverySchema)
   .action(async ({ parsedInput }): Promise<DiscoverFilmsResponse> => {
     const {
@@ -29,10 +30,12 @@ export const discoverFilmAction = actionClient
     if (year) whereConditions.push(eq(schema.films.year, year));
 
     if (genre)
-      whereConditions.push(sql`EXIST (
+      whereConditions.push(
+        sql`EXISTS (
                 SELECT 1 FROM ${schema.filmsToGenres} ftg 
                 JOIN ${schema.genres} g ON g.id = ftg.genre_id
-                WHERE ftg.film_id = ${schema.films.id} AND g.slug = ${genre})`);
+                WHERE ftg.film_id = ${schema.films.id} AND g.slug = ${genre})`,
+      );
 
     if (username && filterType) {
       const user = await db.query.users.findFirst({
@@ -40,27 +43,33 @@ export const discoverFilmAction = actionClient
         columns: { id: true },
       });
 
-      if (!user) return { item: [], nextCursor: null };
+      if (!user) return { items: [], nextCursor: null };
 
       if (filterType === "watchlist") {
-        whereConditions.push(sql`EXISTS(
+        whereConditions.push(
+          sql`EXISTS(
                 SELECT 1 FROM ${schema.watchlist} wl
                 WHERE wl.film_id = ${schema.films.id} AND wl.user_id = ${user.id}
-        )`);
+        )`,
+        );
       } else if (filterType === "liked") {
-        whereConditions.push(sql`EXISTS (
+        whereConditions.push(
+          sql`EXISTS (
                 SELECT 1
                 FROM ${schema.diary} d
                 JOIN ${schema.reviews} r ON r.id = d.review_id
                 WHERE d.film_id = ${schema.films.id}
                         AND d.user_id = ${user.id}
                         AND r.is_linked = true
-        )`);
+        )`,
+        );
       } else if (filterType === "watched") {
-        whereConditions.push(sql`EXISTS (
+        whereConditions.push(
+          sql`EXISTS (
                 SELECT DISTINCT 1 FROM ${schema.diary} d
                 WHERE d.film_id = ${schema.films.id} AND d.user_id = ${user.id}
-        )`);
+        )`,
+        );
       }
     }
 
@@ -150,6 +159,113 @@ export const discoverFilmAction = actionClient
 
 export const getFilmBySlugAction = actionClient
   .inputSchema(getFilmBySlugSchema)
-  .action(async({}));
+  .action(
+    async ({ parsedInput: { slug, currentUserId } }): Promise<FilmDetails> => {
+      const film = await db.query.films.findFirst({
+        where: eq(schema.films.slug, slug),
+        with: {
+          cast: {
+            with: { person: true },
+            orderBy: (cast, { asc }) => [asc(cast.order)],
+          },
+          crew: {
+            with: { person: true },
+          },
+        },
+      });
+
+      if (!film) throw new Error("Film not found");
+
+      const [
+        viewsResult,
+        watchlistResult,
+        likesResult,
+        ratingResult,
+        userWatchlistResult,
+        reviewsData,
+      ] = await Promise.all([
+        db
+          .select({ count: count() })
+          .from(schema.diary)
+          .where(eq(schema.diary.filmId, film.id)),
+
+        db
+          .select({ count: count() })
+          .from(schema.watchlist)
+          .where(eq(schema.watchlist.filmId, film.id)),
+
+        db
+          .select({ count: count() })
+          .from(schema.reviews)
+          .where(
+            and(
+              eq(schema.reviews.filmId, film.id),
+              eq(schema.reviews.isLiked, true),
+            ),
+          ),
+
+        db
+          .select({ avg: avg(schema.reviews.rating) })
+          .from(schema.reviews)
+          .where(eq(schema.reviews.filmId, film.id)),
+
+        currentUserId
+          ? db
+              .select({ count: count() })
+              .from(schema.watchlist)
+              .where(
+                and(
+                  eq(schema.watchlist.filmId, film.id),
+                  eq(schema.watchlist.userId, currentUserId),
+                ),
+              )
+          : Promise.resolve([{ count: 0 }]),
+
+        db.query.reviews.findMany({
+          where: (reviews, { and, eq, isNotNull, gt, ne }) =>
+            and(
+              eq(reviews.filmId, film.id),
+              isNotNull(reviews.content),
+              ne(reviews.content, ""),
+              gt(reviews.rating, 0),
+            ),
+          columns: {
+            id: true,
+            content: true,
+            rating: true,
+            createdAt: true,
+          },
+          with: {
+            user: {
+              columns: {
+                id: true,
+                username: true,
+                avatar: true,
+              },
+            },
+          },
+
+          orderBy: (reviews, { desc }) => [desc(reviews.createdAt)],
+          limit: 6,
+        }),
+      ]);
+
+      const viewsCount = Number(viewsResult[0]?.count ?? 0);
+      const watchlistCount = Number(watchlistResult[0]?.count ?? 0);
+      const likesCount = Number(likesResult[0]?.count ?? 0);
+      const averageRating = Number(ratingResult[0]?.avg ?? 0);
+      const isInWatchlist = Number(userWatchlistResult[0]?.count ?? 0) > 0;
+
+      return {
+        ...film,
+        viewsCount,
+        watchlistCount,
+        likesCount,
+        averageRating,
+        reviews: reviewsData,
+        isInWatchlist,
+      };
+    },
+  );
 
 // 9:22:45
